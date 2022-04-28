@@ -74,7 +74,7 @@
                         </div>
                         <div id="step-2" class="d-none">
                             <div style="padding-left: 20px">
-                                <b-button variant="outline" :to="{name: 'terms_and_conditions'}"><h5>{{$t('terms_and_conditions')}}</h5></b-button>
+                                <router-link :to="{name: 'terms_and_conditions'}"><h5>{{$t('terms_and_conditions')}}</h5></router-link>
                             </div>
                             <div class="payment_method">
                                 <h4>{{$t('contracted_payment_terms_title')}}</h4>
