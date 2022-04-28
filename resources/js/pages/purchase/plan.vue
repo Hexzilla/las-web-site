@@ -11,21 +11,21 @@
                     </h3>
                 </div>
                 <div style="padding-left: 20px; padding-top: 30px">
-                    <h5>{{$t('terms_and_conditions')}} <b-button variant="outline-secondary">{{$t('here')}}</b-button></h5>
+                    <h5>{{$t('terms_and_conditions')}} <b-button variant="outline-primary">{{$t('here')}}</b-button></h5>
                 </div>
                 <div class="payment_method">
                     <h4>{{$t('payment_method')}}</h4>
-                    <div class="form-group">
-                        <b-button variant="outline-secondary" id="bank_transfer">{{$t('bank_transfer')}}</b-button>
-                        <b-button variant="outline-secondary" id="david_card">{{$t('david_card')}}</b-button>
-                        <b-button variant="outline-secondary" id="paypal">{{$t('paypal')}}</b-button>
-                        <b-button variant="outline-secondary" id="amazon_pay">{{$t('amazon_pay')}}</b-button>
-                        <b-button variant="outline-secondary" id="credit_card">{{$t('credit_card')}}</b-button>
-                    </div>
+                        <div class="form-group">
+                            <b-button variant="outline-primary" id="bank_transfer">{{$t('bank_transfer')}}</b-button>
+                            <b-button variant="outline-primary" id="david_card">{{$t('david_card')}}</b-button>
+                            <b-button variant="outline-primary" id="paypal_button" ref="paypal">{{$t('paypal')}}</b-button>
+                            <b-button variant="outline-primary" id="amazon_pay">{{$t('amazon_pay')}}</b-button>
+                            <b-button variant="outline-primary" id="credit_card">{{$t('credit_card')}}</b-button>
+                        </div>
                 </div>
                 <div class="form-group float-right">
-                    <b-button variant="outline-secondary" :to="{name: $t('purchase.url')}">{{$t('back')}}</b-button>
-                    <b-button variant="outline-secondary" id="subscribe">{{$t('subscribe')}}</b-button>
+                    <b-button variant="outline-primary" :to="{name: $t('purchase.url')}">{{$t('back')}}</b-button>
+                    <b-button variant="outline-primary" id="subscribe">{{$t('subscribe')}}</b-button>
                 </div>
             </div>
         </div>
@@ -109,6 +109,7 @@ export default {
             });
             e.preventDefault();
         });
+
         document.getElementById("bank_transfer").addEventListener("click", function(e) {
             console.log("komoju button click")
             handler.open({
@@ -187,7 +188,7 @@ export default {
                     console.log(err);
                 }
 
-            }).render(this.$refs.paypal)
+            }).render("#paypal_button")
         },
 
         async komoju_purchase() { 
@@ -296,6 +297,9 @@ export default {
     }
     .content .payment_information_form .paypal-button div {
         width: 50%;
+    }
+    .btn-outline-primary {
+        border-radius: 10px;
     }
 
 </style>
