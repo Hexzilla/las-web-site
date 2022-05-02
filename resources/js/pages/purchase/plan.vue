@@ -7,21 +7,39 @@
             <div class="content">
                 <div class="category_level">
                     <h3>
-                        {{category.app_name}} {{$t('ias.plan')}}<span style="padding-left: 20px; font-size: 24px">{{$t(category.price)}}</span><span class="float-right">{{$t(category.price)}}</span>
+                        {{category.app_name}} {{$t('ias.plan')}}<span style="padding-left: 20px; font-size: 24px">{{$t(category.price)}}</span><span class="float-right pr-5">{{$t(category.price)}}</span>
                     </h3>
+                    <div v-if="locale=='en'" class="float-right">include tax</div>
                 </div>
                 <div style="padding-left: 20px; padding-top: 30px">
                     <router-link :to="{name: 'terms_and_conditions'}"><h5>{{$t('terms_and_conditions')}}</h5></router-link>
                 </div>
                 <div class="payment_method">
                     <h4>{{$t('payment_method')}}</h4>
+                    <div v-if="locale=='jp'" class="row" style="padding-left: 20px">
                         <div class="form-group">
-                            <b-button variant="outline-primary" id="bank_transfer">{{$t('bank_transfer')}}</b-button>
-                            <b-button variant="outline-primary" id="david_card">{{$t('david_card')}}</b-button>
-                            <b-button variant="outline-primary" id="paypal_button" ref="paypal">{{$t('paypal')}}</b-button>
-                            <b-button variant="outline-primary" id="amazon_pay">{{$t('amazon_pay')}}</b-button>
-                            <b-button variant="outline-primary" id="credit_card">{{$t('credit_card')}}</b-button>
+                            <form id="komoju-form" method="post">
+                                <input id="komojuToken" type="hidden" v-model="komojuToken" name="komojuToken" />
+                                <b-button variant="outline-primary" id="bank_transfer">{{$t('bank_transfer')}}</b-button>
+                                <b-button variant="outline-primary" id="david_card">{{$t('david_card')}}</b-button>
+                                <b-button variant="outline-primary" id="paypal" ref="paypal">{{$t('paypal')}}</b-button>
+                                <b-button variant="outline-primary" id="amazon_pay">{{$t('amazon_pay')}}</b-button>
+                                <b-button variant="outline-primary" id="credit_card">{{$t('credit_card')}}</b-button>
+                            </form>
                         </div>
+                    </div>
+                    <div v-else class="row" style="padding-left: 20px">
+                        <div class="form-group">
+                            <form @submit.prevent="paypal_payment_post" method="post">
+                                <div id="paypal_button"></div>
+                                <b-button variant="outline-primary" id="bank_transfer">{{$t('bank_transfer')}}</b-button>
+                                <b-button variant="outline-primary" id="david_card">{{$t('david_card')}}</b-button>
+                                <b-button variant="outline-primary" id="paypal">{{$t('paypal')}}</b-button>
+                                <b-button variant="outline-primary" id="amazon_pay">{{$t('amazon_pay')}}</b-button>
+                                <b-button variant="outline-primary" id="credit_card">{{$t('credit_card')}}</b-button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group float-right">
                     <b-button variant="outline-primary" :to="{name: $t('purchase.url')}">{{$t('back')}}</b-button>
@@ -67,7 +85,8 @@ export default {
 
         script_paypal.setAttribute(`src`,`https://www.paypal.com/sdk/js?client-id=${ClientID}&currency=USD`)
         script_paypal.setAttribute(`data-namespace`,`paypal_sdk`)
-        script_paypal.addEventListener("load", this.setLoaded)
+        script_paypal.setAttribute(`data-sdk-integration-source`, `button-factory`)
+        script_paypal.addEventListener("load", () => this.setLoaded())
         document.body.appendChild(script_paypal)
 
         //komoju payment button
@@ -144,15 +163,25 @@ export default {
             console.log(cat_id)
             console.log(amount)
 
-            paypal_sdk.Buttons({
+            paypal.Buttons({
                 style: {
                     shape: 'pill',
-                    label: 'checkout'
+                    label: 'checkout',
+                    size: 'small',
+                    color: 'gold',
+                    layout: 'vertical'
                 },
 
                 createOrder: function(data, actions) {
                     return actions.order.create({
-                        purchase_units: [{"amount":{"currency_code":"USD","value":amount}}]
+                        purchase_units: [
+                            {
+                                amount:{
+                                    currency_code:"USD",
+                                    value:amount
+                                }
+                            }
+                            ]
                     });
                 },
 
